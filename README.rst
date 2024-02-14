@@ -1,80 +1,60 @@
-What happens when...
+Какво се случва когато...
 ====================
 
-This repository is an attempt to answer the age-old interview question "What
-happens when you type google.com into your browser's address box and press
-enter?"
+Този репозиторий е опит да се отговори на дългогодишния интервю въпрос "Какво се случва, когато въведете google.com в адресната лента на вашия браузър и натиснете Enter?"
 
-Except instead of the usual story, we're going to try to answer this question
-in as much detail as possible. No skipping out on anything.
+Вместо обичайната история, ще се опитаме да отговорим на този въпрос с възможно най-голяма подробност. Няма да пропускаме нищо.
 
-This is a collaborative process, so dig in and try to help out! There are tons
-of details missing, just waiting for you to add them! So send us a pull
-request, please!
+Това е колаборативен процес, така че се включете и опитайте да помогнете! Липсват тонове детайли, които чакат вие да ги добавите! Затова, моля, изпратете ни pull request!
 
-This is all licensed under the terms of the `Creative Commons Zero`_ license.
+Всичко това е лицензирано под условията на лиценза `Creative Commons Zero`_.
 
-Read this in `简体中文`_ (simplified Chinese), `日本語`_ (Japanese), `한국어`_
-(Korean) and `Spanish`_. NOTE: these have not been reviewed by the alex/what-happens-when
-maintainers.
+Оригинален текст на `Английски`_ (https://github.com/alex/what-happens-when).
 
-Table of Contents
+Съдържание
 ====================
 
 .. contents::
    :backlinks: none
    :local:
 
-The "g" key is pressed
+Натиска се клавиша "g"
 ----------------------
-The following sections explain the physical keyboard actions
-and the OS interrupts. When you press the key "g" the browser receives the
-event and the auto-complete functions kick in.
-Depending on your browser's algorithm and if you are in
-private/incognito mode or not various suggestions will be presented
-to you in the dropdown below the URL bar. Most of these algorithms sort
-and prioritize results based on search history, bookmarks, cookies, and
-popular searches from the internet as a whole. As you are typing
-"google.com" many blocks of code run and the suggestions will be refined
-with each keypress. It may even suggest "google.com" before you finish typing
-it.
 
-The "enter" key bottoms out
----------------------------
+Следващите раздели обясняват физическите действия на клавиатурата и прекъсванията на ОС.
+Когато натиснете клавиша "g", браузърът получава събитието и функциите за автоматично допълване се активират.
+В зависимост от алгоритъма на вашия браузър и дали сте в режим на private/incognito или не,
+различни предложения ще ви бъдат представени в падащото меню под URL лентата.
+Повечето от тези алгоритми сортират и приоритизират резултатите въз основа на историята на търсенето,
+отметките, бисквитките и популярните търсения в интернет като цяло. Докато пишете "google.com",
+много блокове код се изпълняват и предложенията ще бъдат филтрирани с всяко натискане на клавиш.
+Браузърът може дори да предложи "google.com" преди да сте завършили да го пишете.
 
-To pick a zero point, let's choose the Enter key on the keyboard hitting the
-bottom of its range. At this point, an electrical circuit specific to the enter
-key is closed (either directly or capacitively). This allows a small amount of
-current to flow into the logic circuitry of the keyboard, which scans the state
-of each key switch, debounces the electrical noise of the rapid intermittent
-closure of the switch, and converts it to a keycode integer, in this case 13.
-The keyboard controller then encodes the keycode for transport to the computer.
-This is now almost universally over a Universal Serial Bus (USB) or Bluetooth
-connection, but historically has been over PS/2 or ADB connections.
+Клавишът "enter" е натиснат до края
+-----------------------------------
 
-*In the case of the USB keyboard:*
+За стартова точка, нека изберем момента, в който клавишът Enter на клавиатурата е натиснат до края.
+В този момент електрическата верига, специфична за клавиша enter, се затваря (директно или капацитивно).
+Това позволява на малко количество ток да тече към логическата схема на клавиатурата,
+която сканира състоянието на всеки клавишен превключвател, отстранява електрическите шумове
+от бързото прекъсване на превключвателя и го преобразува в целочислен код на клавиша, в този случай 13.
+Контролерът на клавиатурата след това кодира кода на клавиша за транспортиране до компютъра.
+Това в наши дни почти универсално става посредством универсален сериен автобус (USB) или Bluetooth връзка,
+но исторически е било посредством PS/2 или ADB връзки.
 
-- The USB circuitry of the keyboard is powered by the 5V supply provided over
-  pin 1 from the computer's USB host controller.
+*В случай на USB клавиатура:*
 
-- The keycode generated is stored by internal keyboard circuitry memory in a
-  register called "endpoint".
+- USB схемата на клавиатурата се захранва от 5V захранването, предоставено през пин 1 от USB хост контролера на компютъра.
 
-- The host USB controller polls that "endpoint" every ~10ms (minimum value
-  declared by the keyboard), so it gets the keycode value stored on it.
+- Генерираният код на клавиша се съхранява от вътрешната памет на клавиатурната схема в регистър, наречен "крайна точка".
 
-- This value goes to the USB SIE (Serial Interface Engine) to be converted in
-  one or more USB packets that follow the low-level USB protocol.
+- Хост USB контролерът запитва тази "крайна точка" на всеки ~10ms (минимална стойност, декларирана от клавиатурата), така че получава стойността на кода на клавиша, съхранена в нея.
 
-- Those packets are sent by a differential electrical signal over D+ and D-
-  pins (the middle 2) at a maximum speed of 1.5 Mb/s, as an HID
-  (Human Interface Device) device is always declared to be a "low-speed device"
-  (USB 2.0 compliance).
+- Тази стойност отива до USB SIE (Serial Interface Engine) за да бъде преобразувана в един или повече USB пакети, които следват USB протокола от ниско ниво.
 
-- This serial signal is then decoded at the computer's host USB controller, and
-  interpreted by the computer's Human Interface Device (HID) universal keyboard
-  device driver.  The value of the key is then passed into the operating
-  system's hardware abstraction layer.
+- Тези пакети се изпращат чрез диференциален електрически сигнал през D+ и D- пиновете (средните 2) с максимална скорост от 1.5 Mb/s, тъй като HID (Human Interface Device) устройството винаги се декларира като "устройство с ниска скорост" (съответствие с USB 2.0).
+
+- Този сериен сигнал след това се декодира в хост USB контролера на компютъра и се интерпретира от универсалния драйвер за клавиатурно устройство на компютъра (HID). Стойността на клавиша след това се предава в хардуерния абстрактен слой на операционната система.
 
 *In the case of Virtual Keyboard (as in touch screen devices):*
 
@@ -709,3 +689,4 @@ page rendering and painting.
 .. _`downgrade attack`: http://en.wikipedia.org/wiki/SSL_stripping
 .. _`OSI Model`: https://en.wikipedia.org/wiki/OSI_model
 .. _`Spanish`: https://github.com/gonzaleztroyano/what-happens-when-ES
+.. _`Английски`: https://github.com/alex/what-happens-when
